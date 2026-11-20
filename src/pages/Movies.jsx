@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMovies } from "../api";
+import { getMovies, updateMovie } from "../api";
 import AddMovieForm from "../components/AddMovieForm";
 
 function formatTime(totalMinutes) {
@@ -54,6 +54,18 @@ export default function Movies() {
   function titleOf(id) {
     const found = movies.find((m) => m._id === id);
     return found ? found.title : "Unknown";
+  }
+
+  async function toggleWatched(movie) {
+    setError("");
+    try {
+      const updated = await updateMovie(movie._id, { watched: !movie.watched });
+      setMovies((current) =>
+        current.map((m) => (m._id === updated._id ? updated : m))
+      );
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   const watchedCount = movies.filter((m) => m.watched).length;
@@ -155,6 +167,21 @@ export default function Movies() {
                         {movie.watched ? "Watched" : "Not watched"}
                       </span>
                     </div>
+                  </div>
+
+                  {/* Watched toggle button */}
+                  <div className="relative mt-5">
+                    <button
+                      onClick={() => toggleWatched(movie)}
+                      className={
+                        "rounded-full border px-4 py-1.5 text-xs font-medium transition " +
+                        (movie.watched
+                          ? "border-emerald-500/50 text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400"
+                          : "border-line text-soft hover:border-accent hover:text-accent")
+                      }
+                    >
+                      {movie.watched ? "Mark as not watched" : "Mark as watched"}
+                    </button>
                   </div>
 
                   {movie.prerequisites.length > 0 && (
