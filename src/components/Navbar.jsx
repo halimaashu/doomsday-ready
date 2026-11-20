@@ -1,4 +1,6 @@
 import { NavLink } from "react-router-dom";
+import { Moon, Sun } from "@gravity-ui/icons";
+import useTheme from "../useTheme";
 
 const links = [
   { to: "/", label: "Movies" },
@@ -7,25 +9,37 @@ const links = [
 ];
 
 export default function Navbar() {
+  const [theme, toggleTheme] = useTheme();
+
   return (
-    <nav className="sticky top-0 z-10 border-b border-[#2a2a38] bg-[#0b0b12]/90 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <span className="font-heading text-3xl text-[#e11d48]">Doomsday Ready</span>
-        <div className="flex gap-6">
+    <nav className="sticky top-0 z-20 border-b border-line bg-page/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
+        <span className="font-heading text-3xl text-accent">Doomsday Ready</span>
+
+        <div className="flex items-center gap-2">
           {links.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
               end={l.to === "/"}
               className={({ isActive }) =>
-                isActive
-                  ? "font-medium text-white border-b-2 border-[#e11d48] pb-1"
-                  : "text-[#a1a1aa] hover:text-white pb-1"
+                "rounded-full px-4 py-1.5 text-sm font-medium transition " +
+                (isActive
+                  ? "bg-accent text-white"
+                  : "text-soft hover:bg-line hover:text-ink")
               }
             >
               {l.label}
             </NavLink>
           ))}
+
+          <button
+            onClick={toggleTheme}
+            aria-label="Switch theme"
+            className="ml-2 flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition hover:bg-line"
+          >
+            {theme === "dark" ? <Sun /> : <Moon />}
+          </button>
         </div>
       </div>
     </nav>

@@ -1,2 +1,49 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap");
+@import "tailwindcss";
+;
+@source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:is(.dark *));
+
+/* Light mode */
+:root {
+  --page: #f6f5f9;
+  --card: #ffffff;
+  --line: #e4e2ec;
+  --ink: #17151f;
+  --soft: #6b6880;
+  --accent: #e11d48;
+}
+
+/* Dark mode */
+.dark {
+  --page: #0b0b12;
+  --card: #15151e;
+  --line: #2a2a38;
+  --ink: #f4f4f5;
+  --soft: #a1a1aa;
+  --accent: #f43f5e;
+}
+
+/* Tailwind-e ei color-gulo class hishebe use korar jonno */
+@theme inline {
+  --color-page: var(--page);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-soft: var(--soft);
+  --color-accent: var(--accent);
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  transition: background 0.25s, color 0.25s;
+}
+
+.font-heading {
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 0.05em;
+}
