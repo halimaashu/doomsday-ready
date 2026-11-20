@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMovies, updateMovie } from "../api";
 import AddMovieForm from "../components/AddMovieForm";
-
+import EditPrerequisitesModal from "../components/EditPrerequisitesModal";
 function formatTime(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
@@ -34,7 +34,7 @@ export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [editing, setEditing] = useState(null);
   async function loadMovies() {
     try {
       const data = await getMovies();
@@ -67,7 +67,11 @@ export default function Movies() {
       setError(err.message);
     }
   }
-
+function handleSaved(updated) {
+    setMovies((current) =>
+      current.map((m) => (m._id === updated._id ? updated : m))
+    );
+  }
   const watchedCount = movies.filter((m) => m.watched).length;
   const totalRuntime = movies.reduce((sum, m) => sum + m.runtime, 0);
   const percent = movies.length ? Math.round((watchedCount / movies.length) * 100) : 0;
@@ -170,7 +174,7 @@ export default function Movies() {
                   </div>
 
                   {/* Watched toggle button */}
-                  <div className="relative mt-5">
+                                   <div className="relative mt-5 flex flex-wrap gap-2">
                     <button
                       onClick={() => toggleWatched(movie)}
                       className={
@@ -181,6 +185,12 @@ export default function Movies() {
                       }
                     >
                       {movie.watched ? "Mark as not watched" : "Mark as watched"}
+                    </button>
+                    <button
+                      onClick={() => setEditing(movie)}
+                      className="rounded-full border border-line px-4 py-1.5 text-xs font-medium text-soft transition hover:border-accent hover:text-accent"
+                    >
+                      Edit prerequisites
                     </button>
                   </div>
 
@@ -204,6 +214,15 @@ export default function Movies() {
             ))}
           </ol>
         </>
+      )}
+
+        {editing && (
+        <EditPrerequisitesModal
+          movie={editing}
+          allMovies={movies}
+          onClose={() => setEditing(null)}
+          onSaved={handleSaved}
+        />
       )}
     </section>
   );
