@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMovies } from "../api";
+import AddMovieForm from "../components/AddMovieForm";
 
 function formatTime(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
@@ -34,14 +35,20 @@ export default function Movies() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  async function loadMovies() {
+    try {
+      const data = await getMovies();
+      const sorted = [...data].sort((a, b) => a.releaseYear - b.releaseYear);
+      setMovies(sorted);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    getMovies()
-      .then((data) => {
-        const sorted = [...data].sort((a, b) => a.releaseYear - b.releaseYear);
-        setMovies(sorted);
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    loadMovies();
   }, []);
 
   function titleOf(id) {
@@ -71,6 +78,9 @@ export default function Movies() {
           {error}
         </div>
       )}
+
+      {/* Notun movie add korar form */}
+      <AddMovieForm onAdded={loadMovies} />
 
       {loading ? (
         <LoadingCards />
