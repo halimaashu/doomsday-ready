@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap");
+@import "tailwindcss";
+@plugin "./hero.js";
+@source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:is(.dark *));
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #0b0b12;
+  color: #f4f4f5;
+}
+
+.font-heading {
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 0.05em;
+}
